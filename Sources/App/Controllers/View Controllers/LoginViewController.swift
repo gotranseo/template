@@ -34,7 +34,7 @@ class LoginViewController: RouteCollection {
         guard correctCSRFKey == submittedKey else { throw Abort(.unauthorized) }
         try req.session()["csrf"] = nil
         
-        let userQuery = try User.query(on: req)
+        let userQuery = User.query(on: req)
             .filter(\.email == content.email)
             .first()
             .unwrap(or: RedirectError(to: "/login", error: "Invalid Credentials"))

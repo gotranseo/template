@@ -36,7 +36,7 @@ extension Token: Migration {
     }
 }
 
-extension Token: SoftDeletable {
+extension Token {
     static var deletedAtKey: TimestampKey? = \.deletedAt
 }
 
