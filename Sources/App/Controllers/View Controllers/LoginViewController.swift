@@ -28,11 +28,7 @@ class LoginViewController: RouteCollection {
     }
 
     func login(req: Request, content: LoginRequest) throws -> Future<Response> {
-        guard let correctCSRFKey = try req.session()["csrf"] else { throw Abort(.badRequest) }
-        let submittedKey = content.csrf
-        
-        guard correctCSRFKey == submittedKey else { throw Abort(.unauthorized) }
-        try req.session()["csrf"] = nil
+        try req.verifyCSRF()
         
         let userQuery = User.query(on: req)
             .filter(\.email == content.email)

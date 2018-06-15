@@ -22,10 +22,29 @@ class RegisterTests: XCTestCase {
     func testLinuxTestSuiteIncludesAllTests() {
         #if os(macOS) || os(iOS) || os(tvOS) || os(watchOS)
         let thisClass = type(of: self)
-        //        let linuxCount = thisClass.__allTests.count
-        let linuxCount = 0
+        let linuxCount = thisClass.__allTests.count
         let darwinCount = Int(thisClass.defaultTestSuite.testCaseCount)
         XCTAssertEqual(linuxCount, darwinCount, "\(darwinCount - linuxCount) tests are missing from allTests")
         #endif
+    }
+    
+    /// Tests that an email cannot be registered twice
+    func testRegisterEmailAlreadyExists() throws {
+        
+    }
+    
+    /// Tests that an invalid email cannot register
+    func testInvalidEmailFails() throws {
+        
+    }
+    
+    /// Tests that passwords must match
+    func testRegisterPasswordsDontMatch() throws {
+        
+    }
+    
+    /// Tests that users can register successfully when meeting validation requirements
+    func testSuccessfulRegister() throws {
+        
     }
 }

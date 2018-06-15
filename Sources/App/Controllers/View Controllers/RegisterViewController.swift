@@ -24,6 +24,8 @@ class RegisterViewController: RouteCollection {
     }
 
     func register(req: Request, content: RegisterRequest) throws -> Future<Response> {
+        try req.verifyCSRF()
+        
         guard content.password == content.confirmPassword else { throw RedirectError(to: "/register", error: "Passwords don't match") }
         
         let existingUserQuery = User

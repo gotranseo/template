@@ -5,6 +5,7 @@ import Redis
 import VaporSecurityHeaders
 import URLEncodedForm
 import Authentication
+import Flash
 
 public func configure(_ config: inout Config, _ env: inout Environment, _ services: inout Services) throws {
     /// Register providers first
@@ -63,6 +64,12 @@ public func configure(_ config: inout Config, _ env: inout Environment, _ servic
         return KeyedCacheSessions(keyedCache: keyedCache)
     }
     
+    services.register(CSRF.self) { _ -> CSRFVerifier in
+        return CSRFVerifier()
+    }
+    
+    config.prefer(CSRFVerifier.self, for: CSRF.self)
+    
     /// Setup Security Headers
     let cspConfig = ContentSecurityPolicyConfiguration(value: CSPConfig.setupCSP().generateString())
     let xssProtectionConfig = XSSProtectionConfiguration(option: .block)
@@ -116,4 +123,13 @@ public func configure(_ config: inout Config, _ env: inout Environment, _ servic
     /// Register KeyStorage
     guard let apiKey = Environment.get(Constants.restMiddlewareEnvKey) else { throw Abort(.internalServerError) }
     services.register(KeyStorage(restMiddlewareApiKey: apiKey))
+    
+    //Leaf Tag Config
+    var defaultTags = LeafTagConfig.default()
+    defaultTags.use(FlashTag(), as: "flash")
+    
+    services.register(defaultTags)
+    
+    /// Flash Provider
+    try services.register(FlashProvider())
 }

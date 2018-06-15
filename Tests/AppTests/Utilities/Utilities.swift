@@ -27,7 +27,12 @@ extension Application {
             return MockLogger()
         }
         
+        services.register(CSRF.self) { _ -> EmptyCSRFVerifier in
+            return EmptyCSRFVerifier()
+        }
+        
         config.prefer(MockLogger.self, for: Logger.self)
+        config.prefer(EmptyCSRFVerifier.self, for: CSRF.self)
         
         let app = try Application(config: config, environment: env, services: services)
         
