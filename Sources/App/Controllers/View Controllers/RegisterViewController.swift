@@ -38,9 +38,12 @@ class RegisterViewController: RouteCollection {
             
             let hashedPassword = try BCrypt.hash(content.password)
             let newUser = User(name: content.name, email: content.email, password: hashedPassword)
+            try newUser.validate()
             
             let response = req.redirect(to: "/home").flash(.success, "Successfully registered")
             return newUser.save(on: req).transform(to: response)
+        }.catchMap { error in
+            return req.redirect(to: "/register").flash(.success, "Invalid email")
         }
     }
 }

@@ -35,11 +35,17 @@ class LoginTests: XCTestCase {
         let loginRequest = LoginRequest(email: "email@email.com", password: "wrong password", csrf: "n/a")
         
         let loginResponse = try app.sendRequest(to: "/login", method: .POST, data: loginRequest, contentType: .json)
+        XCTAssertEqual(loginResponse.http.status, .seeOther)
         XCTAssertEqual(loginResponse.http.headers.firstValue(name: .location), "/login")
     }
     
     /// Tests that a user with valid credentials can login
     func testLoginSuccessful() throws {
+        let _ = try User(name: "name", email: "email@email.com", password: try BCrypt.hash("password")).save(on: conn).wait()
+        let loginRequest = LoginRequest(email: "email@email.com", password: "password", csrf: "n/a")
         
+        let loginResponse = try app.sendRequest(to: "/login", method: .POST, data: loginRequest, contentType: .json)
+        XCTAssertEqual(loginResponse.http.status, .seeOther)
+        XCTAssertEqual(loginResponse.http.headers.firstValue(name: .location), "/home")
     }
 }

@@ -13,4 +13,5 @@ struct RegisterRequest: Content {
     let name: String
     let password: String
     let confirmPassword: String
+    let csrf: String
 }
