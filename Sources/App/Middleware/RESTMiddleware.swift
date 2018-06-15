@@ -14,7 +14,7 @@ class RESTMiddleware: Middleware {
         let unauthedError = Abort(.unauthorized, reason: "Wrong API Key")
         
         guard let headerValue = request.http.headers.firstValue(name: HTTPHeaderName("X-API-KEY")) else { throw unauthedError }
-        guard keyStorage.restApiKey == headerValue else { throw unauthedError }
+        guard keyStorage.restMiddlewareApiKey == headerValue else { throw unauthedError }
         
         return try next.respond(to: request)
     }

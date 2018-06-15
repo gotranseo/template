@@ -14,9 +14,9 @@ public struct TranseoFlashMiddleware: Middleware {
     
     /// See Middleware.respond
     public func respond(to req: Request, chainingTo next: Responder) throws -> Future<Response> {
-        try TheatreFlashMiddleware.handle(req: req)
+        try TranseoFlashMiddleware.handle(req: req)
         return try next.respond(to: req).map(to: Response.self) { resp in
-            try TranseoErrorMiddleware.handle(req: req, resp: resp)
+            try TranseoFlashMiddleware.handle(req: req, resp: resp)
             return resp
         }.catchMap { error in
             if let redirectError = error as? RedirectError {

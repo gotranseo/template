@@ -26,7 +26,7 @@ class RegisterViewController: RouteCollection {
     func register(req: Request, content: RegisterRequest) throws -> Future<Response> {
         guard content.password == content.confirmPassword else { throw RedirectError(to: "/register", error: "Passwords don't match") }
         
-        let existingUserQuery = try User
+        let existingUserQuery = User
             .query(on: req)
             .filter(\.email == content.email)
             .count()
@@ -35,7 +35,7 @@ class RegisterViewController: RouteCollection {
             guard count == 0 else { throw RedirectError(to: "/register", error: "A user with that email exists already") }
             
             let hashedPassword = try BCrypt.hash(content.password)
-            let newUser = User(name: content.name, email: content.email, password: hashedPassword, isDistrictAdmin: false, schoolAdminId: nil)
+            let newUser = User(name: content.name, email: content.email, password: hashedPassword)
             
             let response = req.redirect(to: "/home").flash(.success, "Successfully registered")
             return newUser.save(on: req).transform(to: response)
