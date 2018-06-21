@@ -31,10 +31,12 @@ public func configure(_ config: inout Config, _ env: inout Environment, _ servic
     services.register(router, as: Router.self)
 
     /// Register the databases
-    var databases = DatabasesConfig()
-    databases.add(database: MySQLDatabase(config: mysqlConfig), as: .mysql)
-    databases.add(database: redisConfig, as: .redis)
-    services.register(databases)
+    services.register { container -> DatabasesConfig in
+        var databaseConfig = DatabasesConfig()
+        databaseConfig.add(database: MySQLDatabase(config: mysqlConfig), as: .mysql)
+        databaseConfig.add(database: redisConfig, as: .redis)
+        return databaseConfig
+    }
 
     /// Register and Prefer Leaf
     try services.register(LeafProvider())
@@ -101,19 +103,23 @@ public func configure(_ config: inout Config, _ env: inout Environment, _ servic
     services.register(middlewares)
     
     /// Call the migrations
-    var migrations = MigrationConfig()
-    try migrate(migrations: &migrations)
-    services.register(migrations)
+    services.register { container -> MigrationConfig in
+        var migrationConfig = MigrationConfig()
+        try migrate(migrations: &migrationConfig)
+        return migrationConfig
+    }
     
     /// Register CommonViewContext
     let cvc = CommonViewContext()
     services.register(cvc)
     
     /// Register Content Config
-    var contentConfig = ContentConfig.default()
-    let formDecoder = URLEncodedFormDecoder(omitEmptyValues: true, omitFlags: false)
-    contentConfig.use(decoder: formDecoder, for: .urlEncodedForm)
-    services.register(contentConfig)
+    services.register { container -> ContentConfig in
+        var contentConfig = ContentConfig.default()
+        let formDecoder = URLEncodedFormDecoder(omitEmptyValues: true, omitFlags: false)
+        contentConfig.use(decoder: formDecoder, for: .urlEncodedForm)
+        return contentConfig
+    }
     
     /// Command Config
     var commandConfig = CommandConfig.default()
