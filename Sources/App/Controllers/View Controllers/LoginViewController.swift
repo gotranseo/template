@@ -30,9 +30,9 @@ class LoginViewController: RouteCollection {
     func login(req: Request, content: LoginRequest) throws -> Future<Response> {
         try req.verifyCSRF()
         
-        let userQuery = User.query(on: req)
-            .filter(\.email == content.email)
-            .first()
+        let repository = try req.userRepository()
+        let userQuery = repository
+            .find(email: content.email, on: req)
             .unwrap(or: RedirectError(to: "/login", error: "Invalid Credentials"))
         
         return userQuery.flatMap { user in
