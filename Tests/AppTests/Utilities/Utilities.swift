@@ -34,6 +34,8 @@ extension Application {
         config.prefer(MockLogger.self, for: Logger.self)
         config.prefer(EmptyCSRFVerifier.self, for: CSRF.self)
         
+        setupTestingRepositories(services: &services, config: &config)
+        
         let app = try Application(config: config, environment: env, services: services)
         
         try App.boot(app)

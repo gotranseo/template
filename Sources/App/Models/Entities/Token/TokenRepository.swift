@@ -2,10 +2,10 @@ import Vapor
 import FluentMySQL
 import Foundation
 
-protocol TokenRepository {
+protocol TokenRepository: Service {
     
 }
 
-class MySQLTokenRepository: TokenRepository, Service {
+final class MySQLTokenRepository: TokenRepository {
     
 }

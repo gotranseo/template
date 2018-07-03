@@ -142,5 +142,5 @@ public func configure(_ config: inout Config, _ env: inout Environment, _ servic
     try services.register(FlashProvider())
     
     // MARK: - Repository Setup
-    setupRepositories(services: &services)
+    setupRepositories(services: &services, config: &config)
 }

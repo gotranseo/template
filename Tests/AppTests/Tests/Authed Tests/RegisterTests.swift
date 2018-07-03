@@ -1,23 +1,14 @@
 import XCTest
 import Foundation
-import FluentMySQL
 import Crypto
 @testable import Vapor
 @testable import App
 
 class RegisterTests: XCTestCase {
     var app: Application!
-    var conn: MySQLConnection!
     
     override func setUp() {
-        try! Application.reset()
-        
         app = try! Application.testable()
-        conn = try! app.newConnection(to: .mysql).wait()
-    }
-    
-    override func tearDown() {
-        conn.close()
     }
     
     func testLinuxTestSuiteIncludesAllTests() {
@@ -31,7 +22,6 @@ class RegisterTests: XCTestCase {
     
     /// Tests that an email cannot be registered twice
     func testRegisterEmailAlreadyExists() throws {
-        let _ = try User(name: "name", email: "email@email.com", password: try BCrypt.hash("password")).save(on: conn).wait()
         let registerRequest = RegisterRequest(email: "email@email.com", name: "name", password: "password", confirmPassword: "password", csrf: "")
         
         let registerResponse = try app.sendRequest(to: "/register", method: .POST, data: registerRequest, contentType: .json)
@@ -59,7 +49,7 @@ class RegisterTests: XCTestCase {
     
     /// Tests that users can register successfully when meeting validation requirements
     func testSuccessfulRegister() throws {
-        let registerRequest = RegisterRequest(email: "email@email.com", name: "name", password: "password", confirmPassword: "password", csrf: "")
+        let registerRequest = RegisterRequest(email: "email2@email.com", name: "name", password: "password", confirmPassword: "password", csrf: "")
         
         let registerResponse = try app.sendRequest(to: "/register", method: .POST, data: registerRequest, contentType: .json)
         XCTAssertEqual(registerResponse.http.status, .seeOther)
