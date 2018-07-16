@@ -24,15 +24,15 @@ class LoginViewController: RouteCollection {
     
     func loginView(req: Request) throws -> Future<View> {
         let context = CSRFContext(csrf: try req.setCSRF())
-        return try req.privateView().render("login", context, request: req)
+        return try req.view().render("login", context, request: req)
     }
 
     func login(req: Request, content: LoginRequest) throws -> Future<Response> {
         try req.verifyCSRF()
         
-        let userQuery = User.query(on: req)
-            .filter(\.email == content.email)
-            .first()
+        let repository = try req.userRepository()
+        let userQuery = repository
+            .find(email: content.email, on: req)
             .unwrap(or: RedirectError(to: "/login", error: "Invalid Credentials"))
         
         return userQuery.flatMap { user in

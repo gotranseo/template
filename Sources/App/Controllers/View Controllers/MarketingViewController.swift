@@ -9,6 +9,6 @@ class MarketingViewController: RouteCollection {
     }
     
     func home(req: Request) throws -> Future<View> {
-        return try req.privateView().render("index", request: req)
+        return try req.view().render("index", request: req)
     }
 }

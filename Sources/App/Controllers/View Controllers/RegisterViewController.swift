@@ -20,18 +20,16 @@ class RegisterViewController: RouteCollection {
     
     func registerView(req: Request) throws -> Future<View> {
         let context = CSRFContext(csrf: try req.setCSRF())
-        return try req.privateView().render("register", context, request: req)
+        return try req.view().render("register", context, request: req)
     }
 
     func register(req: Request, content: RegisterRequest) throws -> Future<Response> {
         try req.verifyCSRF()
         
+        let repository = try req.userRepository()
         guard content.password == content.confirmPassword else { throw RedirectError(to: "/register", error: "Passwords don't match") }
         
-        let existingUserQuery = User
-            .query(on: req)
-            .filter(\.email == content.email)
-            .count()
+        let existingUserQuery = repository.findCount(email: content.email, on: req)
         
         return existingUserQuery.flatMap { count in
             guard count == 0 else { throw RedirectError(to: "/register", error: "A user with that email exists already") }
@@ -41,7 +39,7 @@ class RegisterViewController: RouteCollection {
             try newUser.validate()
             
             let response = req.redirect(to: "/home").flash(.success, "Successfully registered")
-            return newUser.save(on: req).transform(to: response)
+            return repository.save(user: newUser, on: req).transform(to: response)
         }.catchMap { error in
             return req.redirect(to: "/register").flash(.success, "Invalid email")
         }

@@ -6,7 +6,7 @@ import FluentMySQL
 import Leaf
 
 extension Application {
-    static func testable(envArgs: [String]? = nil, capturing: Bool = false) throws -> Application {
+    static func testable(envArgs: [String]? = nil, capturing: Bool = false, preferMemoryRepositories: Bool = true) throws -> Application {
         var config = Config.default()
         var services = Services.default()
         var env = Environment.testing
@@ -33,6 +33,10 @@ extension Application {
         
         config.prefer(MockLogger.self, for: Logger.self)
         config.prefer(EmptyCSRFVerifier.self, for: CSRF.self)
+        
+        if preferMemoryRepositories {
+            setupTestingRepositories(services: &services, config: &config)
+        }
         
         let app = try Application(config: config, environment: env, services: services)
         
