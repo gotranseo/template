@@ -133,13 +133,11 @@ public func configure(_ config: inout Config, _ env: inout Environment, _ servic
     }
     
     // MARK: -  Leaf Tag Config
-    var defaultTags = LeafTagConfig.default()
-    defaultTags.use(FlashTag(), as: "flash")
-    
+    let defaultTags = LeafTagConfig.default()
     services.register(defaultTags)
     
     // MARK: -  Flash Provider
-    try services.register(FlashProvider())
+    services.register(FlashContainer())
     
     // MARK: - Repository Setup
     setupRepositories(services: &services, config: &config)

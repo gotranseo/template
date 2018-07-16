@@ -22,7 +22,7 @@ public final class TranseoErrorMiddleware: Middleware, Service {
         do {
             return try next.respond(to: req).flatMap(to: Response.self) { res in
                 if res.http.status == .notFound {
-                    let view = try req.privateView()
+                    let view = try req.view()
                     return try self.returnNotFoundPage(view: view, req: req)
                 }
                 
@@ -38,7 +38,7 @@ public final class TranseoErrorMiddleware: Middleware, Service {
     private func handleError(_ error: Swift.Error, req: Request) throws -> Future<Response> {
         //get utility objects
         let environment = req.environment
-        let view = try req.privateView()
+        let view = try req.view()
         let log = try req.make(Logger.self)
         
         if let redirectError = error as? RedirectError {

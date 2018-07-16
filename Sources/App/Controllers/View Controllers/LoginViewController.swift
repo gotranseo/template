@@ -24,7 +24,7 @@ class LoginViewController: RouteCollection {
     
     func loginView(req: Request) throws -> Future<View> {
         let context = CSRFContext(csrf: try req.setCSRF())
-        return try req.privateView().render("login", context, request: req)
+        return try req.view().render("login", context, request: req)
     }
 
     func login(req: Request, content: LoginRequest) throws -> Future<Response> {

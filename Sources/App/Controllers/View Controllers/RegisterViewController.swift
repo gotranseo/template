@@ -20,7 +20,7 @@ class RegisterViewController: RouteCollection {
     
     func registerView(req: Request) throws -> Future<View> {
         let context = CSRFContext(csrf: try req.setCSRF())
-        return try req.privateView().render("register", context, request: req)
+        return try req.view().render("register", context, request: req)
     }
 
     func register(req: Request, content: RegisterRequest) throws -> Future<Response> {
