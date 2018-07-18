@@ -60,8 +60,8 @@
         "repositoryURL": "https://github.com/vapor/fluent.git",
         "state": {
           "branch": null,
-          "revision": "058b4579aea61dd05012f121fa9fa9042488c57b",
-          "version": "3.0.0-rc.4.0.2"
+          "revision": "270b6fa372f03809b9795e8f8b9d1c31267a0ff3",
+          "version": "3.0.0"
         }
       },
       {
@@ -114,8 +114,8 @@
         "repositoryURL": "https://github.com/vapor/mysql.git",
         "state": {
           "branch": null,
-          "revision": "b726a2d1c6b0bcc115182e01fb3028351a743045",
-          "version": "3.0.0-rc.4.3"
+          "revision": "592c52a9c125f4e0308c3c7a1dd7f476ecce2896",
+          "version": "3.0.0-rc.4.4"
         }
       },
       {
@@ -150,8 +150,8 @@
         "repositoryURL": "https://github.com/vapor/sql.git",
         "state": {
           "branch": null,
-          "revision": "f89155dbf3dd48c838f79d28a636bbe32ad38693",
-          "version": "2.0.0-beta.3"
+          "revision": "bfbaa048f9e655218611b65da470efa7deb16616",
+          "version": "2.0.2"
         }
       },
       {
@@ -159,8 +159,8 @@
         "repositoryURL": "https://github.com/nodes-vapor/sugar.git",
         "state": {
           "branch": null,
-          "revision": "2b83e293a096ea696535fbab5bd3ee85afde5336",
-          "version": "3.0.0-beta.10"
+          "revision": "1e19ece5ba23abe90a05faabeca3393b0b04022a",
+          "version": "3.0.0-beta.11"
         }
       },
       {

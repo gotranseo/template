@@ -23,7 +23,13 @@ extension ViewRenderer {
     
     private func finishCommonContext(request: Request, cvc: inout CommonViewContext) throws {
         let session = try request.session()
-        let flashContainer = try request.make(FlashContainer.self)
+        
+        if let flashes = session["_flash"], let flashData = flashes.data(using: .utf8) {
+            let jsonDecoder = JSONDecoder()
+            let decodedData = try jsonDecoder.decode([Flash].self, from: flashData)
+            cvc.flashes = decodedData
+            session["_flash"] = nil
+        }
         
         var userId: Int?
         
@@ -31,12 +37,10 @@ extension ViewRenderer {
             userId = Int(userIdString)
         }
         
-        cvc.flashes = flashContainer.flashes
+        
         cvc.userObject = CommonViewContext.CommonUserObject(name: session[Constants.SessionKeys.userName],
                                                             email: session[Constants.SessionKeys.userEmail],
                                                             id: userId)
-        
-        flashContainer.clear()
     }
 }
 
