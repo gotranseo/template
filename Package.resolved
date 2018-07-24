@@ -51,8 +51,8 @@
         "repositoryURL": "https://github.com/gotranseo/flash.git",
         "state": {
           "branch": null,
-          "revision": "6a54f1eca962f4f73c7950ef8ef51ee31378c5cf",
-          "version": "3.0.1"
+          "revision": "cc8917442f1d12986b262407756faaab067d1042",
+          "version": "3.0.3"
         }
       },
       {
@@ -69,8 +69,8 @@
         "repositoryURL": "https://github.com/vapor/fluent-mysql.git",
         "state": {
           "branch": null,
-          "revision": "56789b520e625e7b26074f9abdac72bdce95f1f4",
-          "version": "3.0.0-rc.4.0.3"
+          "revision": "9f129ebff10a7d0331b8be0ac49b555a85e2e261",
+          "version": "3.0.0"
         }
       },
       {
@@ -105,8 +105,8 @@
         "repositoryURL": "https://github.com/vapor/multipart.git",
         "state": {
           "branch": null,
-          "revision": "7778dcb62f3efa845e8e2808937bb347575ba7ce",
-          "version": "3.0.1"
+          "revision": "e57007c23a52b68e44ebdfc70cbe882a7c4f1ec3",
+          "version": "3.0.2"
         }
       },
       {
@@ -114,8 +114,8 @@
         "repositoryURL": "https://github.com/vapor/mysql.git",
         "state": {
           "branch": null,
-          "revision": "592c52a9c125f4e0308c3c7a1dd7f476ecce2896",
-          "version": "3.0.0-rc.4.4"
+          "revision": "8717e4a6389ff1ff56801f4e6411309105945c62",
+          "version": "3.0.0"
         }
       },
       {
@@ -177,8 +177,8 @@
         "repositoryURL": "https://github.com/apple/swift-nio-ssl.git",
         "state": {
           "branch": null,
-          "revision": "0adc938bc8de3d3829b842f9767d81c7480b8403",
-          "version": "1.1.1"
+          "revision": "6617eb0d3afcb12170594968df01ca63afb58ac5",
+          "version": "1.2.0"
         }
       },
       {

@@ -23,7 +23,6 @@ extension Router {
         var middleware: [Middleware] = []
         
         middleware.append(User.authSessionsMiddleware())
-        middleware.append(TranseoFlashMiddleware())
         
         if type == .all {
             middleware.append(AuthedMiddleware())

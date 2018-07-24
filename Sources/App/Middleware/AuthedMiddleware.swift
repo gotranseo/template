@@ -18,7 +18,7 @@ final public class AuthedMiddleware: Middleware {
             if jsonResponse {
                 throw Abort(.unauthorized, reason: "Unauthorized user token")
             } else {
-                return request.future(request.redirect(to: "/login").flash(.error, "Please login"))
+                return request.future(request.redirect(to: "/login").flash(.error, "Please login", try request.session()))
             }
         }
     }

@@ -39,7 +39,7 @@ class LoginViewController: RouteCollection {
             if !(try BCrypt.verify(content.password, created: user.password)) {
                 throw RedirectError(to: "/login", error: "Invalid Credentials")
             } else {
-                let successResponse = req.redirect(to: "/home").flash(.success, "Logged in - Welcome \(user.name)")
+                let successResponse = req.redirect(to: "/home").flash(.success, "Logged in - Welcome \(user.name)", try req.session())
                 return try user.authenticate(req: req, on: req).transform(to: successResponse)
             }
         }
@@ -48,7 +48,7 @@ class LoginViewController: RouteCollection {
     func logout(req: Request) throws -> Future<Response> {
         let user = try req.user()
         
-        let response = req.redirect(to: "/login/").flash(.success, "Logged out")
+        let response = req.redirect(to: "/login/").flash(.success, "Logged out", try req.session())
         return try user.unauthenticate(req: req).transform(to: response)
     }
 }

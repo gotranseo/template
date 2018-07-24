@@ -43,9 +43,9 @@ public final class TranseoErrorMiddleware: Middleware, Service {
         
         if let redirectError = error as? RedirectError {
             if let error = redirectError.flashError {
-                return Future.map(on: req) { req.redirect(to: redirectError.to).flash(.error, error) }
+                return Future.map(on: req) { req.redirect(to: redirectError.to).flash(.error, error, try req.session()) }
             } else if let success = redirectError.flashSucceed {
-                return Future.map(on: req) { req.redirect(to: redirectError.to).flash(.success, success) }
+                return Future.map(on: req) { req.redirect(to: redirectError.to).flash(.success, success, try req.session()) }
             } else {
                 return Future.map(on: req) { req.redirect(to: redirectError.to) }
             }
