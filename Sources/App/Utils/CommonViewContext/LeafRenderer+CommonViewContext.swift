@@ -26,8 +26,8 @@ extension ViewRenderer {
         
         if let flashes = session["_flash"], let flashData = flashes.data(using: .utf8) {
             let jsonDecoder = JSONDecoder()
-            let decodedData = try jsonDecoder.decode([Flash].self, from: flashData)
-            cvc.flashes = decodedData
+            let decodedData = try jsonDecoder.decode(Flash.self, from: flashData)
+            cvc.flash = decodedData
             session["_flash"] = nil
         }
         

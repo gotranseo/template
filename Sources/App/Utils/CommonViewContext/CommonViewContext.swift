@@ -4,7 +4,7 @@ import Flash
 
 struct CommonViewContext: Service, Content {
     var userObject: CommonUserObject?
-    var flashes: [Flash]?
+    var flash: Flash?
     
     struct CommonUserObject: Content {
         var name: String?
