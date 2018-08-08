@@ -8,22 +8,12 @@ import Authentication
 import Flash
 
 public func configure(_ config: inout Config, _ env: inout Environment, _ services: inout Services) throws {
-    // MARK: -  Register providers first
+    // MARK: -  Register database providers first
     try services.register(FluentMySQLProvider())
+    try services.register(RedisProvider())
     
-    guard let databaseUrlString = Environment.get(Constants.databaseURL) else { throw Abort(.internalServerError) }
-    guard let mysqlConfig = try MySQLDatabaseConfig(url: databaseUrlString) else { throw Abort(.internalServerError) }
-
     // MARK: -  Setup Auth
     try services.register(AuthenticationProvider())
-    
-    // MARK: -  Setup Redis
-    guard let redisUrlString = Environment.get(Constants.redisURL) else { throw Abort(.internalServerError) }
-    guard let redisUrl = URL(string: redisUrlString) else { throw Abort(.internalServerError) }
-    
-    // MARK: -  Register Redis
-    try services.register(RedisProvider())
-    let redisConfig = try RedisDatabase(config: RedisClientConfig(url: redisUrl))
     
     // MARK: -  Register routes to the router
     let router = EngineRouter.default()
@@ -33,8 +23,7 @@ public func configure(_ config: inout Config, _ env: inout Environment, _ servic
     // MARK: -  Register the databases
     services.register { container -> DatabasesConfig in
         var databaseConfig = DatabasesConfig()
-        databaseConfig.add(database: MySQLDatabase(config: mysqlConfig), as: .mysql)
-        databaseConfig.add(database: redisConfig, as: .redis)
+        try databases(config: &databaseConfig)
         return databaseConfig
     }
 
@@ -66,26 +55,12 @@ public func configure(_ config: inout Config, _ env: inout Environment, _ servic
         return KeyedCacheSessions(keyedCache: keyedCache)
     }
     
+    //MARK: - CSRF
     services.register(CSRF.self) { _ -> CSRFVerifier in
         return CSRFVerifier()
     }
     
     config.prefer(CSRFVerifier.self, for: CSRF.self)
-    
-    // MARK: -  Setup Security Headers
-    let cspConfig = ContentSecurityPolicyConfiguration(value: CSPConfig.setupCSP().generateString())
-    let xssProtectionConfig = XSSProtectionConfiguration(option: .block)
-    let contentTypeConfig = ContentTypeOptionsConfiguration(option: .nosniff)
-    let frameOptionsConfig = FrameOptionsConfiguration(option: .deny)
-    let referrerConfig = ReferrerPolicyConfiguration(.strictOrigin)
-    
-    let securityHeadersMiddleware = SecurityHeadersFactory()
-        .with(contentSecurityPolicy: cspConfig)
-        .with(XSSProtection: xssProtectionConfig)
-        .with(contentTypeOptions: contentTypeConfig)
-        .with(frameOptions: frameOptionsConfig)
-        .with(referrerPolicy: referrerConfig)
-        .build()
     
     // MARK: -  Per-Request Security Headers
     services.register { _ in
@@ -96,10 +71,7 @@ public func configure(_ config: inout Config, _ env: inout Environment, _ servic
     services.register(TranseoErrorMiddleware())
     
     var middlewares = MiddlewareConfig()
-    middlewares.use(securityHeadersMiddleware)
-    middlewares.use(FileMiddleware.self)
-    middlewares.use(TranseoErrorMiddleware.self)
-    middlewares.use(SessionsMiddleware.self)
+    try middleware(config: &middlewares)
     services.register(middlewares)
     
     // MARK: -  Call the migrations
@@ -116,14 +88,13 @@ public func configure(_ config: inout Config, _ env: inout Environment, _ servic
     // MARK: -  Register Content Config
     services.register { container -> ContentConfig in
         var contentConfig = ContentConfig.default()
-        let formDecoder = URLEncodedFormDecoder(omitEmptyValues: true, omitFlags: false)
-        contentConfig.use(decoder: formDecoder, for: .urlEncodedForm)
+        try content(config: &contentConfig)
         return contentConfig
     }
     
     // MARK: -  Command Config
     var commandConfig = CommandConfig.default()
-    commandConfig.useFluentCommands()
+    commands(config: &commandConfig)
     services.register(commandConfig)
     
     // MARK: -  Register KeyStorage
