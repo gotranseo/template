@@ -42,8 +42,8 @@
         "repositoryURL": "https://github.com/vapor/database-kit.git",
         "state": {
           "branch": null,
-          "revision": "acdd4d3384ec0122dcfcca8d23d9054a2860ffba",
-          "version": "1.2.0"
+          "revision": "7a01659316b9f033fa2150d5cd5e9d3c3e46c2e3",
+          "version": "1.3.0"
         }
       },
       {
@@ -69,8 +69,8 @@
         "repositoryURL": "https://github.com/vapor/fluent-mysql.git",
         "state": {
           "branch": null,
-          "revision": "9f129ebff10a7d0331b8be0ac49b555a85e2e261",
-          "version": "3.0.0"
+          "revision": "2e2f6ea6a97d0b352cf55e6ec289dc1276a6b31a",
+          "version": "3.0.1"
         }
       },
       {
@@ -114,8 +114,8 @@
         "repositoryURL": "https://github.com/vapor/mysql.git",
         "state": {
           "branch": null,
-          "revision": "8717e4a6389ff1ff56801f4e6411309105945c62",
-          "version": "3.0.0"
+          "revision": "448f1ca28b3ea0f64a627bec22e5b0945d31b9f4",
+          "version": "3.0.2"
         }
       },
       {
@@ -123,8 +123,8 @@
         "repositoryURL": "https://github.com/vapor/redis.git",
         "state": {
           "branch": null,
-          "revision": "0be9cc95de432b9d52bac81c6b58513c0a463a40",
-          "version": "3.0.0-rc.3"
+          "revision": "80c9032c70eddb7df5ffb28eddf4237ff3415ae8",
+          "version": "3.0.0-rc.5"
         }
       },
       {
@@ -168,8 +168,8 @@
         "repositoryURL": "https://github.com/apple/swift-nio.git",
         "state": {
           "branch": null,
-          "revision": "695afc5205aaa49fca092b94b479ff71c43d9d3c",
-          "version": "1.8.0"
+          "revision": "c6acf77fc9a310c0ebf8d5f73f285d1639801d2f",
+          "version": "1.9.0"
         }
       },
       {
@@ -213,8 +213,8 @@
         "repositoryURL": "https://github.com/vapor/url-encoded-form.git",
         "state": {
           "branch": null,
-          "revision": "57cf7fb9c1a1014c50bc05123684a9139ad44127",
-          "version": "1.0.3"
+          "revision": "cbfe7ef6301557d3f2d0807a98165232ae06e1c6",
+          "version": "1.0.4"
         }
       },
       {
@@ -231,8 +231,8 @@
         "repositoryURL": "https://github.com/vapor/vapor.git",
         "state": {
           "branch": null,
-          "revision": "6b07105a3899fbbae194ee3eb82f54debe502221",
-          "version": "3.0.6"
+          "revision": "54632a6c1e7ecd9923c0d00b612de936de1c4745",
+          "version": "3.0.8"
         }
       },
       {
