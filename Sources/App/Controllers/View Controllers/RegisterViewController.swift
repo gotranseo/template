@@ -7,7 +7,6 @@
 
 import Foundation
 import Vapor
-import FluentMySQL
 import Crypto
 
 class RegisterViewController: RouteCollection {
@@ -41,7 +40,14 @@ class RegisterViewController: RouteCollection {
             let response = req.redirect(to: "/home").flash(.success, "Successfully registered", try req.session())
             return repository.save(user: newUser, on: req).transform(to: response)
         }.catchMap { error in
-            return req.redirect(to: "/register").flash(.success, "Invalid email", try req.session())
+            let errorMessage: String
+            if error is ValidationError {
+                errorMessage = "Invalid email"
+            } else {
+                errorMessage = "Something went wrong"
+            }
+            
+            return req.redirect(to: "/register").flash(.error, errorMessage, try req.session())
         }
     }
 }
