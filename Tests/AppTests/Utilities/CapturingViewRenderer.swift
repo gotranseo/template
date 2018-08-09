@@ -19,7 +19,7 @@ class CapturingViewRenderer: ViewRenderer, Service {
     var shouldCache: Bool = true
     static var capturedContext: ViewContext?
     
-    func render<E>(_ path: String, _ context: E) -> EventLoopFuture<View> where E : Encodable {
+    func render<E>(_ path: String, _ context: E, userInfo: [AnyHashable : Any]) -> EventLoopFuture<View> where E : Encodable {
         CapturingViewRenderer.capturedContext = context as? ViewContext
         return Future.map(on: EmbeddedEventLoop()) { View(data: "".convertToData()) }
     }
