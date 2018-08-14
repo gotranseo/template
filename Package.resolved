@@ -51,8 +51,8 @@
         "repositoryURL": "https://github.com/gotranseo/flash.git",
         "state": {
           "branch": null,
-          "revision": "cc8917442f1d12986b262407756faaab067d1042",
-          "version": "3.0.3"
+          "revision": "0354ffe6d396d5735d8be98b86efd25d1e09f2db",
+          "version": "3.0.4"
         }
       },
       {
@@ -80,15 +80,6 @@
           "branch": null,
           "revision": "a192ee144ab53370b2c095c003f429746df85595",
           "version": "3.1.0"
-        }
-      },
-      {
-        "package": "JWT",
-        "repositoryURL": "https://github.com/vapor/jwt.git",
-        "state": {
-          "branch": null,
-          "revision": "de0dc5bbba60250c24c5c4b4d2505d7a71dd03ae",
-          "version": "3.0.0-rc.2.1.2"
         }
       },
       {
@@ -152,15 +143,6 @@
           "branch": null,
           "revision": "bfbaa048f9e655218611b65da470efa7deb16616",
           "version": "2.0.2"
-        }
-      },
-      {
-        "package": "Sugar",
-        "repositoryURL": "https://github.com/nodes-vapor/sugar.git",
-        "state": {
-          "branch": null,
-          "revision": "1e19ece5ba23abe90a05faabeca3393b0b04022a",
-          "version": "3.0.0-beta.11"
         }
       },
       {
