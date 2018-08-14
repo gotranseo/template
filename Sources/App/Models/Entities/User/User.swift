@@ -76,7 +76,7 @@ extension User {
     ///
     /// - Parameter req: The logout request
     func unauthenticate(req: Request) throws -> Future<Void> {
-        try req.unauthenticateSession(User.self)
+        try req.unauthenticate(User.self)
         
         let session = try req.session()
         
