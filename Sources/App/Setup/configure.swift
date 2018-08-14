@@ -16,9 +16,11 @@ public func configure(_ config: inout Config, _ env: inout Environment, _ servic
     try services.register(AuthenticationProvider())
     
     // MARK: -  Register routes to the router
-    let router = EngineRouter.default()
-    try routes(router)
-    services.register(router, as: Router.self)
+    services.register(Router.self) { _ -> EngineRouter in
+        let router = EngineRouter.default()
+        try routes(router)
+        return router
+    }
 
     // MARK: -  Register the databases
     services.register { container -> DatabasesConfig in
@@ -37,18 +39,20 @@ public func configure(_ config: inout Config, _ env: inout Environment, _ servic
     
     // MARK: -  Register Sessions
     let secure = env == .production
-    let sessionsConfig = SessionsConfig(cookieName: "vapor-session") { value in
-        return HTTPCookieValue(string: value,
-                               expires: Date(timeIntervalSinceNow: 60 * 60 * 24 * 7),
-                               maxAge: nil,
-                               domain: nil,
-                               path: "/",
-                               isSecure: secure,
-                               isHTTPOnly: true,
-                               sameSite: .lax)
+    services.register { _ -> SessionsConfig in
+        let sessionsConfig = SessionsConfig(cookieName: "vapor-session") { value in
+            return HTTPCookieValue(string: value,
+                                   expires: Date(timeIntervalSinceNow: 60 * 60 * 24 * 7),
+                                   maxAge: nil,
+                                   domain: nil,
+                                   path: "/",
+                                   isSecure: secure,
+                                   isHTTPOnly: true,
+                                   sameSite: .lax)
+        }
+        
+        return sessionsConfig
     }
-    
-    services.register(sessionsConfig)
     
     services.register(Sessions.self) { container -> KeyedCacheSessions in
         let keyedCache = try container.keyedCache(for: .redis)
@@ -68,11 +72,15 @@ public func configure(_ config: inout Config, _ env: inout Environment, _ servic
     }
     
     // MARK: -  Register middleware
-    services.register(TranseoErrorMiddleware())
+    services.register { _ in
+        return TranseoErrorMiddleware()
+    }
     
-    var middlewares = MiddlewareConfig()
-    try middleware(config: &middlewares)
-    services.register(middlewares)
+    services.register { _ -> MiddlewareConfig in
+        var middlewares = MiddlewareConfig()
+        try middleware(config: &middlewares)
+        return middlewares
+    }
     
     // MARK: -  Call the migrations
     services.register { container -> MigrationConfig in
@@ -82,8 +90,9 @@ public func configure(_ config: inout Config, _ env: inout Environment, _ servic
     }
     
     // MARK: -  Register CommonViewContext
-    let cvc = CommonViewContext()
-    services.register(cvc)
+    services.register { _ -> CommonViewContext in
+        return CommonViewContext()
+    }
     
     // MARK: -  Register Content Config
     services.register { container -> ContentConfig in
@@ -93,22 +102,22 @@ public func configure(_ config: inout Config, _ env: inout Environment, _ servic
     }
     
     // MARK: -  Command Config
-    var commandConfig = CommandConfig.default()
-    commands(config: &commandConfig)
-    services.register(commandConfig)
+    services.register { _ -> CommandConfig in
+        var commandConfig = CommandConfig.default()
+        commands(config: &commandConfig)
+        return commandConfig
+    }
     
     // MARK: -  Register KeyStorage
-    guard let apiKey = Environment.get(Constants.restMiddlewareEnvKey) else { throw Abort(.internalServerError) }
     services.register { container -> KeyStorage in
+        guard let apiKey = Environment.get(Constants.restMiddlewareEnvKey) else { throw Abort(.internalServerError) }
         return KeyStorage(restMiddlewareApiKey: apiKey)
     }
     
     // MARK: -  Leaf Tag Config
-    let defaultTags = LeafTagConfig.default()
-    services.register(defaultTags)
-    
-    // MARK: -  Flash Provider
-    services.register(FlashContainer())
+    services.register { _ in
+        return LeafTagConfig.default()
+    }
     
     // MARK: - Repository Setup
     setupRepositories(services: &services, config: &config)
