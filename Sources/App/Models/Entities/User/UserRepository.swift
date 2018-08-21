@@ -11,10 +11,6 @@ protocol UserRepository: ServiceType {
 }
 
 final class MySQLUserRepository: UserRepository {
-    static func makeService(for worker: Container) throws -> Self {
-        return .init()
-    }
-    
     func find(id: Int, on connectable: DatabaseConnectable) -> EventLoopFuture<User?> {
         return User.find(id, on: connectable)
     }
@@ -33,5 +29,13 @@ final class MySQLUserRepository: UserRepository {
     
     func save(user: User, on connectable: DatabaseConnectable) -> EventLoopFuture<User> {
         return user.save(on: connectable)
+    }
+}
+
+extension MySQLUserRepository {
+    static let serviceSupports: [Any.Type] = [UserRepository.self]
+    
+    static func makeService(for worker: Container) throws -> Self {
+        return .init()
     }
 }

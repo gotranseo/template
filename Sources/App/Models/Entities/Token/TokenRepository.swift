@@ -6,7 +6,13 @@ protocol TokenRepository: ServiceType {
     
 }
 
-final class MySQLTokenRepository: TokenRepository {
+final class MySQLTokenRepository: TokenRepository {    
+
+}
+
+extension MySQLTokenRepository {
+    static let serviceSupports: [Any.Type] = [TokenRepository.self]
+    
     static func makeService(for worker: Container) throws -> Self {
         return .init()
     }

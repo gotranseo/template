@@ -2,13 +2,8 @@
 @testable import App
 
 public func setupTestingRepositories(services: inout Services, config: inout Config) {
-    services.register(TokenRepository.self) { _ -> MemoryTokenRepository in
-        return MemoryTokenRepository()
-    }
-    
-    services.register(UserRepository.self) { _ -> MemoryUserRepository in
-        return MemoryUserRepository()
-    }
+    services.register(MemoryTokenRepository.self)
+    services.register(MemoryUserRepository.self)
     
     preferTestingRepositories(config: &config)
 }

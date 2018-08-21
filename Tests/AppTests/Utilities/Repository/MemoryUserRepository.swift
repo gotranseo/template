@@ -3,10 +3,6 @@
 import Crypto
 
 class MemoryUserRepository: UserRepository {
-    static func makeService(for worker: Container) throws -> Self {
-        return .init()
-    }
-    
     func find(id: Int, on connectable: DatabaseConnectable) -> EventLoopFuture<User?> {
         let user = User(name: "", email: "email@email.com", password: try! BCrypt.hash("password"))
         user.id = id
@@ -38,5 +34,13 @@ class MemoryUserRepository: UserRepository {
         savedUser.id = 1
         
         return connectable.future(savedUser)
+    }
+}
+
+extension MemoryUserRepository {
+    static let serviceSupports: [Any.Type] = [UserRepository.self]
+    
+    static func makeService(for worker: Container) throws -> Self {
+        return .init()
     }
 }

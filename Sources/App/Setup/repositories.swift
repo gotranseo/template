@@ -9,18 +9,13 @@ import Foundation
 import Vapor
 
 public func setupRepositories(services: inout Services, config: inout Config) {
-    services.register(TokenRepository.self) { _ -> MySQLTokenRepository in
-        return MySQLTokenRepository()
-    }
+    services.register(MySQLTokenRepository.self)
+    services.register(MySQLUserRepository.self)
     
-    services.register(UserRepository.self) { _ -> MySQLUserRepository in
-        return MySQLUserRepository()
-    }
-    
-    preferTestingRepositories(config: &config)
+    preferRepositories(config: &config)
 }
 
-private func preferTestingRepositories(config: inout Config) {
+private func preferRepositories(config: inout Config) {
     config.prefer(MySQLTokenRepository.self, for: TokenRepository.self)
     config.prefer(MySQLUserRepository.self, for: UserRepository.self)
 }
