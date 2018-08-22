@@ -10,6 +10,12 @@ import Vapor
 import Crypto
 
 class RegisterViewController: RouteCollection {
+    private let userRepository: UserRepository
+    
+    init(userRepository: UserRepository) {
+        self.userRepository = userRepository
+    }
+    
     func boot(router: Router) throws {
         router.frontend(.noAuthed) { build in
             build.get("/register", use: registerView)
@@ -25,10 +31,8 @@ class RegisterViewController: RouteCollection {
     func register(req: Request, content: RegisterRequest) throws -> Future<Response> {
         try req.verifyCSRF()
         
-        let repository = try req.userRepository()
         guard content.password == content.confirmPassword else { throw RedirectError(to: "/register", error: "Passwords don't match") }
-        
-        let existingUserQuery = repository.findCount(email: content.email, on: req)
+        let existingUserQuery = userRepository.findCount(email: content.email)
         
         return existingUserQuery.flatMap { count in
             guard count == 0 else { throw RedirectError(to: "/register", error: "A user with that email exists already") }
@@ -38,7 +42,7 @@ class RegisterViewController: RouteCollection {
             try newUser.validate()
             
             let response = req.redirect(to: "/home").flash(.success, "Successfully registered", try req.session())
-            return repository.save(user: newUser, on: req).transform(to: response)
+            return self.userRepository.save(user: newUser).transform(to: response)
         }.catchMap { error in
             let errorMessage: String
             if error is ValidationError {

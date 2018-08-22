@@ -16,9 +16,9 @@ public func configure(_ config: inout Config, _ env: inout Environment, _ servic
     try services.register(AuthenticationProvider())
     
     // MARK: -  Register routes to the router
-    services.register(Router.self) { _ -> EngineRouter in
+    services.register(Router.self) { container -> EngineRouter in
         let router = EngineRouter.default()
-        try routes(router)
+        try routes(router, container)
         return router
     }
 

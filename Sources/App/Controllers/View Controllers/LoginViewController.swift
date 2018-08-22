@@ -10,6 +10,12 @@ import Vapor
 import Crypto
 
 class LoginViewController: RouteCollection {
+    private let userRepository: UserRepository
+    
+    init(userRepository: UserRepository) {
+        self.userRepository = userRepository
+    }
+    
     func boot(router: Router) throws {
         router.frontend(.noAuthed) { build in
             build.get("/login", use: loginView)
@@ -29,9 +35,8 @@ class LoginViewController: RouteCollection {
     func login(req: Request, content: LoginRequest) throws -> Future<Response> {
         try req.verifyCSRF()
         
-        let repository = try req.userRepository()
-        let userQuery = repository
-            .find(email: content.email, on: req)
+        let userQuery = userRepository
+            .find(email: content.email)
             .unwrap(or: RedirectError(to: "/login", error: "Invalid Credentials"))
         
         return userQuery.flatMap { user in
