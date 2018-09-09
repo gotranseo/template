@@ -1,5 +1,23 @@
 import XCTest
 
+extension LoginIntegrationTests {
+    static let __allTests = [
+        ("testLinuxTestSuiteIncludesAllTests", testLinuxTestSuiteIncludesAllTests)
+    ]
+}
+
+extension RegisterIntegrationTests {
+    static let __allTests = [
+        ("testLinuxTestSuiteIncludesAllTests", testLinuxTestSuiteIncludesAllTests)
+    ]
+}
+
+extension UserRepositoryTests {
+    static let __allTests = [
+        ("testLinuxTestSuiteIncludesAllTests", testLinuxTestSuiteIncludesAllTests)
+    ]
+}
+
 extension LoginTests {
     static let __allTests = [
         ("testLinuxTestSuiteIncludesAllTests", testLinuxTestSuiteIncludesAllTests),

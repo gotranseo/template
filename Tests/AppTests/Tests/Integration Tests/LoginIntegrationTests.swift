@@ -14,7 +14,7 @@ class LoginIntegrationTests: XCTestCase {
     func testLinuxTestSuiteIncludesAllTests() {
         #if os(macOS) || os(iOS) || os(tvOS) || os(watchOS)
         let thisClass = type(of: self)
-        let linuxCount = 1
+        let linuxCount = thisClass.__allTests.count
         let darwinCount = Int(thisClass.defaultTestSuite.testCaseCount)
         XCTAssertEqual(linuxCount, darwinCount, "\(darwinCount - linuxCount) tests are missing from allTests")
         #endif
