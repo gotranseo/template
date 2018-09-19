@@ -2,7 +2,7 @@ version: 2
 jobs:
   linux:
     docker:
-      - image: codevapor/swift:4.1
+      - image: swift:4.2
       - image: redis:3.2
       - image: mysql:5.7
         environment:

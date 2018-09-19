@@ -90,7 +90,7 @@ public final class TranseoErrorMiddleware: Middleware, Service {
                 }
             }
             
-            let res = req.makeResponse()
+            let res = req.response()
             res.http.status = status
             
             do {
@@ -118,7 +118,7 @@ public final class TranseoErrorMiddleware: Middleware, Service {
     }
     
     private func returnNotFoundPage(view: ViewRenderer, req: Request) throws -> Future<Response> {
-        let res = req.makeResponse()
+        let res = req.response()
         
         if req.http.accept.mediaTypes.contains(.html) {
             return try view.render("404", request: req).map(to: Response.self) { view in
@@ -139,7 +139,7 @@ public final class TranseoErrorMiddleware: Middleware, Service {
     }
     
     private func returnGenericErrorPage(view: ViewRenderer, req: Request, errorCode: UInt, message: String) throws -> Future<Response> {
-        let res = req.makeResponse()
+        let res = req.response()
         let context: [String: String] = ["errorCode": String(errorCode), "message": message]
         
         return view.render("genericerror", context).map(to: Response.self) { view in
