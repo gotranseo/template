@@ -20,7 +20,7 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - v2-spm-deps-{{ checksum "Package.resolved" }}
+            - v3-spm-deps-{{ checksum "Package.resolved" }}
       - run:
           name: Copy Resolved Package
           command: cp Package.resolved res
@@ -38,12 +38,12 @@ jobs:
           name: Restoring Resolved Package
           command: mv res Package.resolved
       - save_cache:
-          key: v2-spm-deps-{{ checksum "Package.resolved" }}
+          key: v3-spm-deps-{{ checksum "Package.resolved" }}
           paths:
             - .build
   linux-release:
     docker:
-      - image: codevapor/swift:4.1
+      - image: swift:4.2
     steps:
       - checkout
       - run:
