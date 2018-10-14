@@ -15,10 +15,8 @@ struct CSRFVerifier: CSRF {
         if let token = submittedToken {
             guard token == requiredToken else { throw Abort(.forbidden) }
         } else {
-            let _ = try request.content.decode([String: String].self).map(to: Void.self) { form in
-                guard let submittedToken: String = form[key] else { throw Abort(.forbidden) }
-                guard requiredToken == submittedToken else { throw Abort(.forbidden) }
-            }
+            let submittedToken: String = try request.content.syncGet(at: key)
+            guard requiredToken == submittedToken else { throw Abort(.forbidden) }
         }
     }
 }
